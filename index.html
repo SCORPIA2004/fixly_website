@@ -7,7 +7,7 @@
 <meta name="description" content="Citizens report a pothole in 30 seconds. AI categorizes it, PostGIS dedupes it, municipal staff resolve it. One pipeline, two surfaces, TR/EN.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script>
 // Apply theme before paint to avoid flash
 (function () {
@@ -23,13 +23,18 @@ tailwind.config = {
   theme: {
     extend: {
       colors: {
-        brand: { 50:"#EFF6FF",100:"#DBEAFE",300:"#7CB9F2",500:"#208AEF",600:"#1D7FD6",700:"#1A6FC0",900:"#0F3D66" },
-        ink: "#0F172A",
-        line: "#E2E8F0",
-        paper: "#F8FAFC",
+        brand: { 50:"#F0FDFA",100:"#CCFBF1",300:"#5EEAD4",500:"#0D9488",600:"#0F766E",700:"#115E59",900:"#134E4A" },
+        cta: { 500:"#F97316", 600:"#EA580C" },
+        ink: "#1C1917",
+        line: "#E7E5E4",
+        paper: "#FAFAF8",
         accent: "#16A34A"
       },
-      fontFamily: { sans: ['"Plus Jakarta Sans"','system-ui','sans-serif'] },
+      fontFamily: {
+        sans: ['"Public Sans"','system-ui','sans-serif'],
+        display: ['Fraunces','Georgia','serif'],
+        mono: ['"IBM Plex Mono"','ui-monospace','monospace']
+      },
       maxWidth: { wrap: "72rem" }
     }
   }
@@ -41,42 +46,54 @@ tailwind.config = {
     html { scroll-behavior: auto; }
     *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
   }
-  .focus-ring:focus-visible { outline: 2px solid #208AEF; outline-offset: 2px; border-radius: 6px; }
+  ::selection { background: rgba(13,148,136,.25); }
+  .focus-ring:focus-visible { outline: 2px solid #0D9488; outline-offset: 2px; border-radius: 6px; }
   .pin { width: 10px; height: 10px; border-radius: 9999px; box-shadow: 0 0 0 4px rgba(255,255,255,.85); }
-  .dark .pin { box-shadow: 0 0 0 4px rgba(15,23,42,.85); }
+  .dark .pin { box-shadow: 0 0 0 4px rgba(12,10,9,.85); }
+  /* hand-drawn underline flourish */
+  .squiggle {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 9' preserveAspectRatio='none'%3E%3Cpath d='M2 7c18-5 38-5 58-3s40 2 58-2' fill='none' stroke='%23F97316' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 100% .42em;
+    padding-bottom: .18em;
+  }
+  /* dot-grid texture for the hero */
+  .dotgrid { background-image: radial-gradient(rgba(13,148,136,.16) 1.1px, transparent 1.1px); background-size: 22px 22px; }
+  .dark .dotgrid { background-image: radial-gradient(rgba(94,234,212,.10) 1.1px, transparent 1.1px); }
 </style>
 </head>
-<body class="bg-white font-sans text-ink antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
+<body class="bg-white font-sans text-ink antialiased transition-colors duration-200 dark:bg-stone-950 dark:text-stone-100">
 
 <!-- Nav -->
-<header class="sticky top-0 z-50 border-b border-line bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
+<header class="sticky top-0 z-50 border-b border-line bg-white/90 backdrop-blur dark:border-stone-800 dark:bg-stone-950/90">
   <nav class="mx-auto flex h-16 max-w-wrap items-center justify-between px-5" aria-label="Main">
     <a href="#" class="focus-ring flex items-center gap-2.5">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 21s-7-5.1-7-11a7 7 0 1 1 14 0c0 5.9-7 11-7 11Z" fill="#208AEF"/>
+        <path d="M12 21s-7-5.1-7-11a7 7 0 1 1 14 0c0 5.9-7 11-7 11Z" fill="#0D9488"/>
         <path d="M9.6 9.8l1.7 1.7-1.2 1.2a1.7 1.7 0 0 0 2.4 2.4l1.2-1.2 1.7 1.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
-      <span class="text-lg font-extrabold tracking-tight">Fixly</span>
+      <span class="font-display text-xl font-semibold tracking-tight">Fixly</span>
     </a>
-    <div class="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex dark:text-slate-400">
-      <a href="#how" data-i18n="nav.how" class="focus-ring transition-colors duration-200 hover:text-ink dark:hover:text-white">How it works</a>
-      <a href="#features" data-i18n="nav.features" class="focus-ring transition-colors duration-200 hover:text-ink dark:hover:text-white">Features</a>
-      <a href="#stack" data-i18n="nav.stack" class="focus-ring transition-colors duration-200 hover:text-ink dark:hover:text-white">Stack</a>
-      <a href="#run" data-i18n="nav.run" class="focus-ring transition-colors duration-200 hover:text-ink dark:hover:text-white">Run it</a>
+    <div class="hidden items-center gap-8 text-sm font-medium text-stone-600 md:flex dark:text-stone-400">
+      <a href="#how" data-i18n="nav.how" class="focus-ring transition-colors duration-200 hover:text-brand-600 dark:hover:text-brand-300">How it works</a>
+      <a href="#features" data-i18n="nav.features" class="focus-ring transition-colors duration-200 hover:text-brand-600 dark:hover:text-brand-300">Features</a>
+      <a href="#stack" data-i18n="nav.stack" class="focus-ring transition-colors duration-200 hover:text-brand-600 dark:hover:text-brand-300">Stack</a>
+      <a href="#run" data-i18n="nav.run" class="focus-ring transition-colors duration-200 hover:text-brand-600 dark:hover:text-brand-300">Run it</a>
     </div>
     <div class="flex items-center gap-2.5">
       <!-- Language toggle -->
-      <div class="flex overflow-hidden rounded-full border border-line text-xs font-bold dark:border-slate-700" role="group" aria-label="Language">
+      <div class="flex overflow-hidden rounded-full border border-line text-xs font-bold dark:border-stone-700" role="group" aria-label="Language">
         <button id="lang-tr" type="button" class="focus-ring cursor-pointer px-3 py-1.5 transition-colors duration-200" aria-pressed="false">TR</button>
         <button id="lang-en" type="button" class="focus-ring cursor-pointer px-3 py-1.5 transition-colors duration-200" aria-pressed="true">EN</button>
       </div>
       <!-- Theme toggle -->
       <button id="theme-toggle" type="button" aria-label="Toggle dark mode"
-        class="focus-ring grid h-9 w-9 cursor-pointer place-items-center rounded-full border border-line text-slate-600 transition-colors duration-200 hover:bg-paper dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800">
+        class="focus-ring grid h-9 w-9 cursor-pointer place-items-center rounded-full border border-line text-stone-600 transition-colors duration-200 hover:bg-paper dark:border-stone-700 dark:text-stone-300 dark:hover:bg-stone-800">
         <svg class="dark:hidden" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3 6.6 6.6 0 0 0 21 12.8Z"/></svg>
         <svg class="hidden dark:block" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
-      <a href="#run" data-i18n="nav.cta" class="focus-ring cursor-pointer rounded-lg bg-brand-500 px-4 py-2 text-sm font-bold text-white transition-colors duration-200 hover:bg-brand-600">
+      <a href="#run" data-i18n="nav.cta" class="focus-ring cursor-pointer rounded-full bg-cta-500 px-4 py-2 text-sm font-bold text-white transition-colors duration-200 hover:bg-cta-600">
         Try the demo
       </a>
     </div>
@@ -84,62 +101,69 @@ tailwind.config = {
 </header>
 
 <!-- Hero -->
-<section class="border-b border-line bg-paper dark:border-slate-800 dark:bg-slate-900">
-  <div class="mx-auto grid max-w-wrap items-center gap-12 px-5 py-16 md:py-24 lg:grid-cols-2">
+<section class="relative overflow-hidden border-b border-line bg-paper dark:border-stone-800 dark:bg-stone-900">
+  <div class="dotgrid pointer-events-none absolute inset-0" aria-hidden="true"></div>
+  <div class="relative mx-auto grid max-w-wrap items-center gap-12 px-5 py-16 md:py-24 lg:grid-cols-2">
     <div>
-      <p class="mb-4 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 text-xs font-bold text-brand-700 dark:border-brand-900 dark:bg-brand-900/40 dark:text-brand-300">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
+      <p class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand-100 bg-brand-50 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-widest text-brand-700 dark:border-brand-900 dark:bg-brand-900/40 dark:text-brand-300">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
         <span data-i18n="hero.badge">Cursor Hackathon · AI-Driven Urban Solutions</span>
       </p>
-      <h1 data-i18n="hero.title" class="text-4xl font-extrabold leading-[1.1] tracking-tight md:text-5xl">
-        A pothole shouldn't need a phone call, a form, and a prayer.
+      <h1 data-i18n="hero.title" class="font-display text-4xl font-semibold leading-[1.08] tracking-tight md:text-[3.4rem]">
+        A pothole shouldn't need a phone call, a form, and <span class="squiggle whitespace-nowrap">a prayer.</span>
       </h1>
-      <p data-i18n="hero.sub" class="mt-5 max-w-xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">
+      <p data-i18n="hero.sub" class="mt-6 max-w-xl text-lg leading-relaxed text-stone-600 dark:text-stone-400">
         Citizens photograph the problem — done in 30 seconds. AI suggests the category,
         PostGIS folds 50 duplicate reports into one cluster, and municipal staff work a
         clean triage queue instead of a call-center backlog.
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-4">
-        <a href="#run" data-i18n="hero.cta1" class="focus-ring cursor-pointer rounded-lg bg-brand-500 px-6 py-3 text-base font-bold text-white transition-colors duration-200 hover:bg-brand-600">
+        <a href="#run" data-i18n="hero.cta1" class="focus-ring cursor-pointer rounded-full bg-cta-500 px-7 py-3.5 text-base font-bold text-white shadow-[0_4px_14px_rgba(249,115,22,.35)] transition-colors duration-200 hover:bg-cta-600">
           Run the demo locally
         </a>
-        <a href="#how" data-i18n="hero.cta2" class="focus-ring cursor-pointer rounded-lg border border-line bg-white px-6 py-3 text-base font-bold text-ink transition-colors duration-200 hover:border-slate-300 hover:bg-paper dark:border-slate-700 dark:bg-slate-800 dark:text-white dark:hover:border-slate-600 dark:hover:bg-slate-700">
+        <a href="#how" data-i18n="hero.cta2" class="focus-ring cursor-pointer rounded-full border-2 border-brand-600/30 bg-white px-7 py-3 text-base font-bold text-brand-700 transition-colors duration-200 hover:border-brand-600 hover:bg-brand-50 dark:border-brand-300/30 dark:bg-stone-800 dark:text-brand-300 dark:hover:border-brand-300 dark:hover:bg-stone-700">
           See the pipeline
         </a>
       </div>
-      <dl class="mt-10 grid max-w-md grid-cols-3 gap-6 border-t border-line pt-6 dark:border-slate-800">
+      <dl class="mt-10 grid max-w-md grid-cols-3 gap-6 border-t border-line pt-6 dark:border-stone-800">
         <div>
-          <dt data-i18n="stats.t1" class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Report time</dt>
-          <dd data-i18n="stats.v1" class="mt-1 text-2xl font-extrabold">~30s</dd>
+          <dt data-i18n="stats.t1" class="font-mono text-[11px] font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">Report time</dt>
+          <dd data-i18n="stats.v1" class="mt-1 font-mono text-2xl font-semibold text-brand-700 dark:text-brand-300">~30s</dd>
         </div>
         <div>
-          <dt data-i18n="stats.t2" class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">AI category</dt>
-          <dd data-i18n="stats.v2" class="mt-1 text-2xl font-extrabold">2–8s</dd>
+          <dt data-i18n="stats.t2" class="font-mono text-[11px] font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">AI category</dt>
+          <dd data-i18n="stats.v2" class="mt-1 font-mono text-2xl font-semibold text-brand-700 dark:text-brand-300">2–8s</dd>
         </div>
         <div>
-          <dt data-i18n="stats.t3" class="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">Languages</dt>
-          <dd class="mt-1 text-2xl font-extrabold">TR·EN</dd>
+          <dt data-i18n="stats.t3" class="font-mono text-[11px] font-medium uppercase tracking-widest text-stone-500 dark:text-stone-400">Languages</dt>
+          <dd class="mt-1 font-mono text-2xl font-semibold text-brand-700 dark:text-brand-300">TR·EN</dd>
         </div>
       </dl>
     </div>
 
     <!-- Product mock: admin inbox card stack -->
-    <div class="relative mx-auto w-full max-w-md" aria-hidden="true">
-      <div class="rounded-2xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,.06)] dark:border-slate-700 dark:bg-slate-800">
+    <div class="relative mx-auto w-full max-w-md lg:rotate-1" aria-hidden="true">
+      <div class="rounded-2xl border border-line bg-white p-5 shadow-[0_10px_40px_-12px_rgba(28,25,23,.18)] dark:border-stone-700 dark:bg-stone-800">
         <div class="mb-4 flex items-center justify-between">
           <p data-i18n="mock.title" class="text-sm font-bold">Triage inbox · Demo Belediyesi</p>
-          <span data-i18n="mock.open" class="rounded-full bg-paper px-2.5 py-1 text-xs font-semibold text-slate-500 dark:bg-slate-700 dark:text-slate-300">12 open</span>
+          <span class="flex items-center gap-1.5 rounded-full bg-paper px-2.5 py-1 text-xs font-semibold text-stone-500 dark:bg-stone-700 dark:text-stone-300">
+            <span class="relative flex h-2 w-2">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-cta-500 opacity-60"></span>
+              <span class="relative inline-flex h-2 w-2 rounded-full bg-cta-500"></span>
+            </span>
+            <span data-i18n="mock.open">12 open</span>
+          </span>
         </div>
 
-        <div class="rounded-xl border border-line p-4 dark:border-slate-700">
+        <div class="rounded-xl border border-line p-4 dark:border-stone-700">
           <div class="flex items-start justify-between gap-3">
             <div class="flex gap-3">
               <div class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-brand-50 dark:bg-brand-900/40">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M4 16l3.5-9h9L20 16M2.5 16h19M8 16l1-2.5h6L16 16"/></svg>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M4 16l3.5-9h9L20 16M2.5 16h19M8 16l1-2.5h6L16 16"/></svg>
               </div>
               <div>
                 <p class="text-sm font-bold">Yol ve kaldırım</p>
-                <p class="text-xs text-slate-500 dark:text-slate-400">Kadıköy · Moda Cd. — 41.015, 28.979</p>
+                <p class="text-xs text-stone-500 dark:text-stone-400">Kadıköy · Moda Cd. — 41.015, 28.979</p>
               </div>
             </div>
             <span data-i18n="mock.s1" class="whitespace-nowrap rounded-full bg-amber-50 px-2.5 py-1 text-xs font-bold text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">pending triage</span>
@@ -149,14 +173,14 @@ tailwind.config = {
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M12 3l1.9 5.6L19.5 9l-4.6 3.4 1.8 5.6L12 14.6 7.3 18l1.8-5.6L4.5 9l5.6-.4L12 3Z"/></svg>
               <span data-i18n="mock.ai">AI: pothole · 0.87</span>
             </span>
-            <span class="inline-flex items-center gap-1 rounded-full bg-paper px-2.5 py-1 text-xs font-bold text-slate-600 dark:bg-slate-700 dark:text-slate-300">
+            <span class="inline-flex items-center gap-1 rounded-full bg-paper px-2.5 py-1 text-xs font-bold text-stone-600 dark:bg-stone-700 dark:text-stone-300">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M16 11a4 4 0 1 0-8 0M3 21c0-3.3 4-5 9-5s9 1.7 9 5"/></svg>
               <span data-i18n="mock.dedup">12 kişi bildirdi</span>
             </span>
           </div>
         </div>
 
-        <div class="mt-3 rounded-xl border border-line p-4 dark:border-slate-700">
+        <div class="mt-3 rounded-xl border border-line p-4 dark:border-stone-700">
           <div class="flex items-start justify-between gap-3">
             <div class="flex gap-3">
               <div class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-amber-50 dark:bg-amber-900/30">
@@ -164,14 +188,14 @@ tailwind.config = {
               </div>
               <div>
                 <p class="text-sm font-bold">Sokak aydınlatması</p>
-                <p data-i18n="mock.r2sub" class="text-xs text-slate-500 dark:text-slate-400">Üsküdar · Çamlıca — assigned to Fen İşleri</p>
+                <p data-i18n="mock.r2sub" class="text-xs text-stone-500 dark:text-stone-400">Üsküdar · Çamlıca — assigned to Fen İşleri</p>
               </div>
             </div>
-            <span data-i18n="mock.s2" class="whitespace-nowrap rounded-full bg-blue-50 px-2.5 py-1 text-xs font-bold text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">assigned</span>
+            <span data-i18n="mock.s2" class="whitespace-nowrap rounded-full bg-sky-50 px-2.5 py-1 text-xs font-bold text-sky-700 dark:bg-sky-900/40 dark:text-sky-300">assigned</span>
           </div>
         </div>
 
-        <div class="mt-3 rounded-xl border border-line p-4 opacity-70 dark:border-slate-700">
+        <div class="mt-3 rounded-xl border border-line p-4 opacity-70 dark:border-stone-700">
           <div class="flex items-start justify-between gap-3">
             <div class="flex gap-3">
               <div class="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-green-50 dark:bg-green-900/30">
@@ -179,7 +203,7 @@ tailwind.config = {
               </div>
               <div>
                 <p class="text-sm font-bold">Çöp ve temizlik</p>
-                <p data-i18n="mock.r3sub" class="text-xs text-slate-500 dark:text-slate-400">Beşiktaş · resolved in 2 days</p>
+                <p data-i18n="mock.r3sub" class="text-xs text-stone-500 dark:text-stone-400">Beşiktaş · resolved in 2 days</p>
               </div>
             </div>
             <span data-i18n="mock.s3" class="whitespace-nowrap rounded-full bg-green-50 px-2.5 py-1 text-xs font-bold text-green-700 dark:bg-green-900/40 dark:text-green-300">resolved</span>
@@ -188,14 +212,14 @@ tailwind.config = {
       </div>
 
       <!-- floating citizen confirmation -->
-      <div class="absolute -bottom-6 -left-4 hidden w-64 rounded-xl border border-line bg-white p-4 shadow-lg sm:block dark:border-slate-700 dark:bg-slate-800">
+      <div class="absolute -bottom-6 -left-4 hidden w-64 -rotate-2 rounded-xl border border-line bg-white p-4 shadow-lg sm:block dark:border-stone-700 dark:bg-stone-800">
         <div class="flex items-center gap-2.5">
           <div class="grid h-9 w-9 place-items-center rounded-full bg-green-100 dark:bg-green-900/50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.4" aria-hidden="true"><path d="M5 13l4 4 10-10"/></svg>
           </div>
           <div>
             <p data-i18n="mock.toastTitle" class="text-sm font-bold leading-tight">Bildiriminiz alındı</p>
-            <p data-i18n="mock.toastSub" class="text-xs text-slate-500 dark:text-slate-400">Siz ve 11 kişi daha bildirdi</p>
+            <p data-i18n="mock.toastSub" class="text-xs text-stone-500 dark:text-stone-400">Siz ve 11 kişi daha bildirdi</p>
           </div>
         </div>
       </div>
@@ -204,53 +228,48 @@ tailwind.config = {
 </section>
 
 <!-- Problem strip -->
-<section class="border-b border-line dark:border-slate-800">
+<section class="border-b border-line dark:border-stone-800">
   <div class="mx-auto max-w-wrap px-5 py-12">
-    <p data-i18n="problem" class="mx-auto max-w-3xl text-center text-base leading-relaxed text-slate-600 dark:text-slate-400">
+    <p data-i18n="problem" class="mx-auto max-w-3xl text-center font-display text-xl leading-relaxed text-stone-600 dark:text-stone-400">
       Today a broken streetlight gets reported five ways — <em>çağrı merkezi</em>, CİMER, Beyaz Masa,
       social media, one-off apps. Citizens never hear back; staff drown in duplicates.
-      Fixly is <strong class="font-bold text-ink dark:text-white">one pipeline with two surfaces</strong>: a citizen app and a staff dashboard,
+      Fixly is <strong class="font-semibold text-ink dark:text-white">one pipeline with two surfaces</strong>: a citizen app and a staff dashboard,
       writing to the same backend.
     </p>
   </div>
 </section>
 
 <!-- How it works -->
-<section id="how" class="border-b border-line bg-paper dark:border-slate-800 dark:bg-slate-900">
+<section id="how" class="border-b border-line bg-paper dark:border-stone-800 dark:bg-stone-900">
   <div class="mx-auto max-w-wrap px-5 py-16 md:py-20">
-    <h2 data-i18n="how.title" class="text-center text-3xl font-extrabold tracking-tight md:text-4xl">Photo to fixed, in three moves</h2>
-    <p data-i18n="how.sub" class="mx-auto mt-3 max-w-2xl text-center text-slate-600 dark:text-slate-400">No signup wall, no forms. The camera is the interface — AI fills in the rest.</p>
+    <p data-i18n="how.eyebrow" class="text-center font-mono text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-300">The pipeline</p>
+    <h2 data-i18n="how.title" class="mt-3 text-center font-display text-3xl font-semibold tracking-tight md:text-4xl">Photo to fixed, in three moves</h2>
+    <p data-i18n="how.sub" class="mx-auto mt-3 max-w-2xl text-center text-stone-600 dark:text-stone-400">No signup wall, no forms. The camera is the interface — AI fills in the rest.</p>
 
     <ol class="mt-12 grid gap-6 md:grid-cols-3">
-      <li class="rounded-2xl border border-line bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
-        <div class="flex items-center gap-3">
-          <span class="grid h-10 w-10 place-items-center rounded-lg bg-brand-50 text-sm font-extrabold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">01</span>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4V8Z"/><circle cx="12" cy="13" r="3.2"/></svg>
-        </div>
-        <h3 data-i18n="step1.title" class="mt-4 text-lg font-bold">Citizen snaps it</h3>
-        <p data-i18n="step1.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <li class="relative overflow-hidden rounded-2xl border border-line bg-white p-6 transition-shadow duration-200 hover:shadow-md dark:border-stone-700 dark:bg-stone-800">
+        <span class="pointer-events-none absolute -right-3 -top-7 select-none font-display text-[7rem] font-semibold leading-none text-brand-500/10 dark:text-brand-300/10" aria-hidden="true">1</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4V8Z"/><circle cx="12" cy="13" r="3.2"/></svg>
+        <h3 data-i18n="step1.title" class="mt-4 font-display text-xl font-semibold">Citizen snaps it</h3>
+        <p data-i18n="step1.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
           Anonymous session on first launch — no account. Photo + GPS + an optional one-liner,
           submitted from the Expo app in about 30 seconds.
         </p>
       </li>
-      <li class="rounded-2xl border border-line bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
-        <div class="flex items-center gap-3">
-          <span class="grid h-10 w-10 place-items-center rounded-lg bg-brand-50 text-sm font-extrabold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">02</span>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M12 3l1.9 5.6 5.6.4-4.6 3.4 1.8 5.6L12 14.6 7.3 18l1.8-5.6L4.5 9l5.6-.4L12 3Z"/></svg>
-        </div>
-        <h3 data-i18n="step2.title" class="mt-4 text-lg font-bold">AI triages it</h3>
-        <p data-i18n="step2.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <li class="relative overflow-hidden rounded-2xl border border-line bg-white p-6 transition-shadow duration-200 hover:shadow-md dark:border-stone-700 dark:bg-stone-800">
+        <span class="pointer-events-none absolute -right-3 -top-7 select-none font-display text-[7rem] font-semibold leading-none text-brand-500/10 dark:text-brand-300/10" aria-hidden="true">2</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M12 3l1.9 5.6 5.6.4-4.6 3.4 1.8 5.6L12 14.6 7.3 18l1.8-5.6L4.5 9l5.6-.4L12 3Z"/></svg>
+        <h3 data-i18n="step2.title" class="mt-4 font-display text-xl font-semibold">AI triages it</h3>
+        <p data-i18n="step2.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
           Hugging Face vision suggests the category in 2–8 seconds. PostGIS checks a 50 m radius —
           the 12th report of the same pothole joins the existing cluster instead of the queue.
         </p>
       </li>
-      <li class="rounded-2xl border border-line bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
-        <div class="flex items-center gap-3">
-          <span class="grid h-10 w-10 place-items-center rounded-lg bg-brand-50 text-sm font-extrabold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">03</span>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4 10-10"/></svg>
-        </div>
-        <h3 data-i18n="step3.title" class="mt-4 text-lg font-bold">Staff resolve it</h3>
-        <p data-i18n="step3.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+      <li class="relative overflow-hidden rounded-2xl border border-line bg-white p-6 transition-shadow duration-200 hover:shadow-md dark:border-stone-700 dark:bg-stone-800">
+        <span class="pointer-events-none absolute -right-3 -top-7 select-none font-display text-[7rem] font-semibold leading-none text-brand-500/10 dark:text-brand-300/10" aria-hidden="true">3</span>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M5 13l4 4 10-10"/></svg>
+        <h3 data-i18n="step3.title" class="mt-4 font-display text-xl font-semibold">Staff resolve it</h3>
+        <p data-i18n="step3.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
           One inbox: confirm category, assign the department, mark resolved. The citizen watches the
           status move — <em>İnceleme → Atandı → Çözüldü</em> — instead of wondering if anyone read it.
         </p>
@@ -260,53 +279,55 @@ tailwind.config = {
 </section>
 
 <!-- Features -->
-<section id="features" class="border-b border-line dark:border-slate-800">
+<section id="features" class="border-b border-line dark:border-stone-800">
   <div class="mx-auto max-w-wrap px-5 py-16 md:py-20">
-    <h2 data-i18n="features.title" class="text-center text-3xl font-extrabold tracking-tight md:text-4xl">Built for the workflow, not the form</h2>
-    <p data-i18n="features.sub" class="mx-auto mt-3 max-w-2xl text-center text-slate-600 dark:text-slate-400">The reporting form is the easy part. Deduplication and staff triage are the moat.</p>
+    <p data-i18n="features.eyebrow" class="text-center font-mono text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-300">Capabilities</p>
+    <h2 data-i18n="features.title" class="mt-3 text-center font-display text-3xl font-semibold tracking-tight md:text-4xl">Built for the workflow, not the form</h2>
+    <p data-i18n="features.sub" class="mx-auto mt-3 max-w-2xl text-center text-stone-600 dark:text-stone-400">The reporting form is the easy part. Deduplication and staff triage are the moat.</p>
 
     <div class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      <article class="rounded-2xl border border-line p-6 transition-colors duration-200 hover:border-brand-500/40 dark:border-slate-800 dark:hover:border-brand-500/50">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M12 3l1.9 5.6 5.6.4-4.6 3.4 1.8 5.6L12 14.6 7.3 18l1.8-5.6L4.5 9l5.6-.4L12 3Z"/></svg>
-        <h3 data-i18n="f1.title" class="mt-4 font-bold">CV-assisted categories</h3>
-        <p data-i18n="f1.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Vision model proposes the category; staff confirm with one click. Inanimate objects only — no person or plate detection, ever.</p>
+      <article class="rounded-2xl border border-line p-6 transition-all duration-200 hover:border-brand-500/50 hover:shadow-md dark:border-stone-800 dark:hover:border-brand-300/40">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M12 3l1.9 5.6 5.6.4-4.6 3.4 1.8 5.6L12 14.6 7.3 18l1.8-5.6L4.5 9l5.6-.4L12 3Z"/></svg>
+        <h3 data-i18n="f1.title" class="mt-4 font-display text-lg font-semibold">CV-assisted categories</h3>
+        <p data-i18n="f1.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">Vision model proposes the category; staff confirm with one click. Inanimate objects only — no person or plate detection, ever.</p>
       </article>
-      <article class="rounded-2xl border border-line p-6 transition-colors duration-200 hover:border-brand-500/40 dark:border-slate-800 dark:hover:border-brand-500/50">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-dasharray="3 3"/></svg>
-        <h3 data-i18n="f2.title" class="mt-4 font-bold">PostGIS deduplication</h3>
-        <p data-i18n="f2.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400"><code class="rounded bg-paper px-1.5 py-0.5 text-xs dark:bg-slate-800">ST_DWithin</code> clustering per category — 50 reports of one pothole become a single work item with a reporter count.</p>
+      <article class="rounded-2xl border border-line p-6 transition-all duration-200 hover:border-brand-500/50 hover:shadow-md dark:border-stone-800 dark:hover:border-brand-300/40">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8" stroke-dasharray="3 3"/></svg>
+        <h3 data-i18n="f2.title" class="mt-4 font-display text-lg font-semibold">PostGIS deduplication</h3>
+        <p data-i18n="f2.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400"><code class="rounded bg-paper px-1.5 py-0.5 font-mono text-xs dark:bg-stone-800">ST_DWithin</code> clustering per category — 50 reports of one pothole become a single work item with a reporter count.</p>
       </article>
-      <article class="rounded-2xl border border-line p-6 transition-colors duration-200 hover:border-brand-500/40 dark:border-slate-800 dark:hover:border-brand-500/50">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
-        <h3 data-i18n="f3.title" class="mt-4 font-bold">Status transparency</h3>
-        <p data-i18n="f3.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Every report carries a public timeline from submission to resolution. Trust is the feedback loop, not the submission.</p>
+      <article class="rounded-2xl border border-line p-6 transition-all duration-200 hover:border-brand-500/50 hover:shadow-md dark:border-stone-800 dark:hover:border-brand-300/40">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+        <h3 data-i18n="f3.title" class="mt-4 font-display text-lg font-semibold">Status transparency</h3>
+        <p data-i18n="f3.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">Every report carries a public timeline from submission to resolution. Trust is the feedback loop, not the submission.</p>
       </article>
-      <article class="rounded-2xl border border-line p-6 transition-colors duration-200 hover:border-brand-500/40 dark:border-slate-800 dark:hover:border-brand-500/50">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M3.5 8h17M3.5 16h17"/></svg>
-        <h3 data-i18n="f4.title" class="mt-4 font-bold">Bilingual by default</h3>
-        <p data-i18n="f4.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">TR/EN across both surfaces from one shared catalog — formal <em>siz</em> throughout, locale-aware statuses, switchable mid-session.</p>
+      <article class="rounded-2xl border border-line p-6 transition-all duration-200 hover:border-brand-500/50 hover:shadow-md dark:border-stone-800 dark:hover:border-brand-300/40">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18M3.5 8h17M3.5 16h17"/></svg>
+        <h3 data-i18n="f4.title" class="mt-4 font-display text-lg font-semibold">Bilingual by default</h3>
+        <p data-i18n="f4.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">TR/EN across both surfaces from one shared catalog — formal <em>siz</em> throughout, locale-aware statuses, switchable mid-session.</p>
       </article>
-      <article class="rounded-2xl border border-line p-6 transition-colors duration-200 hover:border-brand-500/40 dark:border-slate-800 dark:hover:border-brand-500/50">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z"/></svg>
-        <h3 data-i18n="f5.title" class="mt-4 font-bold">KVKK from day one</h3>
-        <p data-i18n="f5.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Anonymous citizen sessions, redaction before inference, deletion policy in the docs — privacy is an architecture decision, not a checkbox.</p>
+      <article class="rounded-2xl border border-line p-6 transition-all duration-200 hover:border-brand-500/50 hover:shadow-md dark:border-stone-800 dark:hover:border-brand-300/40">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z"/></svg>
+        <h3 data-i18n="f5.title" class="mt-4 font-display text-lg font-semibold">KVKK from day one</h3>
+        <p data-i18n="f5.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">Anonymous citizen sessions, redaction before inference, deletion policy in the docs — privacy is an architecture decision, not a checkbox.</p>
       </article>
-      <article class="rounded-2xl border border-line p-6 transition-colors duration-200 hover:border-brand-500/40 dark:border-slate-800 dark:hover:border-brand-500/50">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#208AEF" stroke-width="2" aria-hidden="true"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg>
-        <h3 data-i18n="f6.title" class="mt-4 font-bold">AI-built, in the open</h3>
-        <p data-i18n="f6.body" class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">Developed end-to-end with Cursor — ADR-locked decisions, agentic rulesets, and a Cursor SDK script that keeps TR translations in sync.</p>
+      <article class="rounded-2xl border border-line p-6 transition-all duration-200 hover:border-brand-500/50 hover:shadow-md dark:border-stone-800 dark:hover:border-brand-300/40">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2" aria-hidden="true"><path d="M8 9l-4 3 4 3M16 9l4 3-4 3M13 5l-2 14"/></svg>
+        <h3 data-i18n="f6.title" class="mt-4 font-display text-lg font-semibold">AI-built, in the open</h3>
+        <p data-i18n="f6.body" class="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">Developed end-to-end with Cursor — ADR-locked decisions, agentic rulesets, and a Cursor SDK script that keeps TR translations in sync.</p>
       </article>
     </div>
   </div>
 </section>
 
 <!-- Stack -->
-<section id="stack" class="border-b border-line bg-paper dark:border-slate-800 dark:bg-slate-900">
+<section id="stack" class="border-b border-line bg-paper dark:border-stone-800 dark:bg-stone-900">
   <div class="mx-auto max-w-wrap px-5 py-16">
     <div class="grid items-center gap-10 lg:grid-cols-2">
       <div>
-        <h2 data-i18n="stack.title" class="text-3xl font-extrabold tracking-tight">Two surfaces, one backend</h2>
-        <p data-i18n="stack.sub" class="mt-3 max-w-lg leading-relaxed text-slate-600 dark:text-slate-400">
+        <p data-i18n="stack.eyebrow" class="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-300">Architecture</p>
+        <h2 data-i18n="stack.title" class="mt-3 font-display text-3xl font-semibold tracking-tight">Two surfaces, one backend</h2>
+        <p data-i18n="stack.sub" class="mt-3 max-w-lg leading-relaxed text-stone-600 dark:text-stone-400">
           Both apps write to the same Go API. Events flow through an in-process bus to the CV
           pipeline; reports land in Postgres with PostGIS doing the spatial work.
         </p>
@@ -316,17 +337,17 @@ tailwind.config = {
             <span data-i18n="stack.li1"><strong class="font-bold">Citizen app</strong> — Expo · React Native · anonymous JWT</span>
           </li>
           <li class="flex items-center gap-3">
-            <span class="pin bg-accent"></span>
+            <span class="pin bg-cta-500"></span>
             <span data-i18n="stack.li2"><strong class="font-bold">Staff dashboard</strong> — Next.js · triage inbox · map view</span>
           </li>
           <li class="flex items-center gap-3">
-            <span class="pin bg-amber-500"></span>
+            <span class="pin bg-stone-500"></span>
             <span data-i18n="stack.li3"><strong class="font-bold">API</strong> — Go (masterfabric) · Postgres + PostGIS · Hugging Face inference</span>
           </li>
         </ul>
       </div>
-      <div class="rounded-2xl border border-line bg-white p-6 dark:border-slate-700 dark:bg-slate-800">
-        <pre class="overflow-x-auto text-xs leading-relaxed text-slate-700 dark:text-slate-300"><code>apps/web          Next.js staff dashboard
+      <div class="rounded-2xl border border-line bg-white p-6 dark:border-stone-700 dark:bg-stone-800">
+        <pre class="overflow-x-auto font-mono text-xs leading-relaxed text-stone-700 dark:text-stone-300"><code>apps/web          Next.js staff dashboard
 apps/mobile       Expo citizen app
 services/api      Go API · PostGIS · CV pipeline
 packages/i18n     Shared TR/EN catalogs
@@ -338,23 +359,24 @@ docs/             ADRs · KVKK · roadmap</code></pre>
 </section>
 
 <!-- Run it -->
-<section id="run" class="border-b border-line dark:border-slate-800">
+<section id="run" class="border-b border-line dark:border-stone-800">
   <div class="mx-auto max-w-wrap px-5 py-16 md:py-20">
     <div class="mx-auto max-w-2xl text-center">
-      <h2 data-i18n="run.title" class="text-3xl font-extrabold tracking-tight md:text-4xl">Run the whole thing locally</h2>
-      <p data-i18n="run.sub" class="mt-3 text-slate-600 dark:text-slate-400">Postgres, Redis and the API in one script. Seeded with <em>Demo Belediyesi</em> — categories, staff users and ~30 reports.</p>
+      <p data-i18n="run.eyebrow" class="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-brand-600 dark:text-brand-300">Quick start</p>
+      <h2 data-i18n="run.title" class="mt-3 font-display text-3xl font-semibold tracking-tight md:text-4xl">Run the whole thing locally</h2>
+      <p data-i18n="run.sub" class="mt-3 text-stone-600 dark:text-stone-400">Postgres, Redis and the API in one script. Seeded with <em>Demo Belediyesi</em> — categories, staff users and ~30 reports.</p>
     </div>
-    <div class="mx-auto mt-8 max-w-2xl rounded-2xl bg-ink p-6 text-left dark:border dark:border-slate-800 dark:bg-slate-900">
-      <pre class="overflow-x-auto text-sm leading-relaxed text-slate-100"><code><span class="text-slate-400"># API + database</span>
+    <div class="mx-auto mt-8 max-w-2xl rounded-2xl bg-brand-900 p-6 text-left shadow-[0_10px_40px_-12px_rgba(19,78,74,.5)] dark:border dark:border-stone-800 dark:bg-stone-900">
+      <pre class="overflow-x-auto font-mono text-sm leading-relaxed text-brand-50"><code><span class="text-brand-300/70"># API + database</span>
 cd services/api && ./dev.sh
 
-<span class="text-slate-400"># Staff dashboard → localhost:3000</span>
+<span class="text-brand-300/70"># Staff dashboard → localhost:3000</span>
 cd apps/web && npm run dev
 
-<span class="text-slate-400"># Citizen app → scan QR with Expo Go</span>
+<span class="text-brand-300/70"># Citizen app → scan QR with Expo Go</span>
 cd apps/mobile && npm start</code></pre>
     </div>
-    <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
+    <p class="mt-6 text-center text-sm text-stone-500 dark:text-stone-400">
       <span data-i18n="run.docs">Full setup, API keys and demo script in</span>
       <a href="https://github.com/SCORPIA2004/fixly/tree/main/docs" class="focus-ring cursor-pointer font-semibold text-brand-700 underline-offset-2 transition-colors duration-200 hover:text-brand-500 hover:underline dark:text-brand-300 dark:hover:text-brand-100">docs/</a>.
     </p>
@@ -362,20 +384,20 @@ cd apps/mobile && npm start</code></pre>
 </section>
 
 <!-- Footer -->
-<footer class="bg-paper dark:bg-slate-900">
-  <div class="mx-auto flex max-w-wrap flex-col items-center justify-between gap-4 px-5 py-10 text-sm text-slate-500 sm:flex-row dark:text-slate-400">
+<footer class="bg-paper dark:bg-stone-900">
+  <div class="mx-auto flex max-w-wrap flex-col items-center justify-between gap-4 px-5 py-10 text-sm text-stone-500 sm:flex-row dark:text-stone-400">
     <div class="flex items-center gap-2">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 21s-7-5.1-7-11a7 7 0 1 1 14 0c0 5.9-7 11-7 11Z" fill="#208AEF"/>
+        <path d="M12 21s-7-5.1-7-11a7 7 0 1 1 14 0c0 5.9-7 11-7 11Z" fill="#0D9488"/>
         <path d="M9.6 9.8l1.7 1.7-1.2 1.2a1.7 1.7 0 0 0 2.4 2.4l1.2-1.2 1.7 1.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
       </svg>
-      <span class="font-bold text-ink dark:text-white">Fixly</span>
+      <span class="font-display font-semibold text-ink dark:text-white">Fixly</span>
       <span aria-hidden="true">·</span>
       <span data-i18n="footer.tagline">Report urban issues in seconds</span>
     </div>
     <div class="flex items-center gap-6">
-      <a href="https://github.com/SCORPIA2004/fixly/blob/main/docs/vision.md" data-i18n="footer.vision" class="focus-ring cursor-pointer transition-colors duration-200 hover:text-ink dark:hover:text-white">Vision</a>
-      <a href="https://github.com/SCORPIA2004/fixly/blob/main/docs/privacy/kvkk.md" class="focus-ring cursor-pointer transition-colors duration-200 hover:text-ink dark:hover:text-white">KVKK</a>
+      <a href="https://github.com/SCORPIA2004/fixly/blob/main/docs/vision.md" data-i18n="footer.vision" class="focus-ring cursor-pointer transition-colors duration-200 hover:text-brand-600 dark:hover:text-brand-300">Vision</a>
+      <a href="https://github.com/SCORPIA2004/fixly/blob/main/docs/privacy/kvkk.md" class="focus-ring cursor-pointer transition-colors duration-200 hover:text-brand-600 dark:hover:text-brand-300">KVKK</a>
       <span>AGPL-3.0</span>
     </div>
   </div>
@@ -391,7 +413,7 @@ const STRINGS = {
     "nav.run": "Run it",
     "nav.cta": "Try the demo",
     "hero.badge": "Cursor Hackathon · AI-Driven Urban Solutions",
-    "hero.title": "A pothole shouldn't need a phone call, a form, and a prayer.",
+    "hero.title": "A pothole shouldn't need a phone call, a form, and <span class='squiggle whitespace-nowrap'>a prayer.</span>",
     "hero.sub": "Citizens photograph the problem — done in 30 seconds. AI suggests the category, PostGIS folds 50 duplicate reports into one cluster, and municipal staff work a clean triage queue instead of a call-center backlog.",
     "hero.cta1": "Run the demo locally",
     "hero.cta2": "See the pipeline",
@@ -407,7 +429,8 @@ const STRINGS = {
     "mock.r3sub": "Beşiktaş · resolved in 2 days",
     "mock.toastTitle": "Report received",
     "mock.toastSub": "You and 11 others reported this",
-    "problem": "Today a broken streetlight gets reported five ways — <em>çağrı merkezi</em>, CİMER, Beyaz Masa, social media, one-off apps. Citizens never hear back; staff drown in duplicates. Fixly is <strong class='font-bold text-ink dark:text-white'>one pipeline with two surfaces</strong>: a citizen app and a staff dashboard, writing to the same backend.",
+    "problem": "Today a broken streetlight gets reported five ways — <em>çağrı merkezi</em>, CİMER, Beyaz Masa, social media, one-off apps. Citizens never hear back; staff drown in duplicates. Fixly is <strong class='font-semibold text-ink dark:text-white'>one pipeline with two surfaces</strong>: a citizen app and a staff dashboard, writing to the same backend.",
+    "how.eyebrow": "The pipeline",
     "how.title": "Photo to fixed, in three moves",
     "how.sub": "No signup wall, no forms. The camera is the interface — AI fills in the rest.",
     "step1.title": "Citizen snaps it",
@@ -416,12 +439,13 @@ const STRINGS = {
     "step2.body": "Hugging Face vision suggests the category in 2–8 seconds. PostGIS checks a 50 m radius — the 12th report of the same pothole joins the existing cluster instead of the queue.",
     "step3.title": "Staff resolve it",
     "step3.body": "One inbox: confirm category, assign the department, mark resolved. The citizen watches the status move — <em>İnceleme → Atandı → Çözüldü</em> — instead of wondering if anyone read it.",
+    "features.eyebrow": "Capabilities",
     "features.title": "Built for the workflow, not the form",
     "features.sub": "The reporting form is the easy part. Deduplication and staff triage are the moat.",
     "f1.title": "CV-assisted categories",
     "f1.body": "Vision model proposes the category; staff confirm with one click. Inanimate objects only — no person or plate detection, ever.",
     "f2.title": "PostGIS deduplication",
-    "f2.body": "<code class='rounded bg-paper px-1.5 py-0.5 text-xs dark:bg-slate-800'>ST_DWithin</code> clustering per category — 50 reports of one pothole become a single work item with a reporter count.",
+    "f2.body": "<code class='rounded bg-paper px-1.5 py-0.5 font-mono text-xs dark:bg-stone-800'>ST_DWithin</code> clustering per category — 50 reports of one pothole become a single work item with a reporter count.",
     "f3.title": "Status transparency",
     "f3.body": "Every report carries a public timeline from submission to resolution. Trust is the feedback loop, not the submission.",
     "f4.title": "Bilingual by default",
@@ -430,11 +454,13 @@ const STRINGS = {
     "f5.body": "Anonymous citizen sessions, redaction before inference, deletion policy in the docs — privacy is an architecture decision, not a checkbox.",
     "f6.title": "AI-built, in the open",
     "f6.body": "Developed end-to-end with Cursor — ADR-locked decisions, agentic rulesets, and a Cursor SDK script that keeps TR translations in sync.",
+    "stack.eyebrow": "Architecture",
     "stack.title": "Two surfaces, one backend",
     "stack.sub": "Both apps write to the same Go API. Events flow through an in-process bus to the CV pipeline; reports land in Postgres with PostGIS doing the spatial work.",
     "stack.li1": "<strong class='font-bold'>Citizen app</strong> — Expo · React Native · anonymous JWT",
     "stack.li2": "<strong class='font-bold'>Staff dashboard</strong> — Next.js · triage inbox · map view",
     "stack.li3": "<strong class='font-bold'>API</strong> — Go (masterfabric) · Postgres + PostGIS · Hugging Face inference",
+    "run.eyebrow": "Quick start",
     "run.title": "Run the whole thing locally",
     "run.sub": "Postgres, Redis and the API in one script. Seeded with <em>Demo Belediyesi</em> — categories, staff users and ~30 reports.",
     "run.docs": "Full setup, API keys and demo script in",
@@ -448,7 +474,7 @@ const STRINGS = {
     "nav.run": "Çalıştırın",
     "nav.cta": "Demoyu deneyin",
     "hero.badge": "Cursor Hackathon · Yapay Zekâ Destekli Şehir Çözümleri",
-    "hero.title": "Bir çukuru bildirmek için telefon, form ve dua gerekmemeli.",
+    "hero.title": "Bir çukuru bildirmek için telefon, form ve <span class='squiggle whitespace-nowrap'>dua gerekmemeli.</span>",
     "hero.sub": "Vatandaş sorunun fotoğrafını çeker — 30 saniyede tamam. Yapay zekâ kategoriyi önerir, PostGIS 50 mükerrer bildirimi tek kümede toplar; belediye ekipleri çağrı merkezi yığını yerine düzenli bir inceleme kuyruğunda çalışır.",
     "hero.cta1": "Demoyu yerelde çalıştırın",
     "hero.cta2": "Akışı inceleyin",
@@ -464,7 +490,8 @@ const STRINGS = {
     "mock.r3sub": "Beşiktaş · 2 günde çözüldü",
     "mock.toastTitle": "Bildiriminiz alındı",
     "mock.toastSub": "Siz ve 11 kişi daha bildirdi",
-    "problem": "Bugün bozuk bir sokak lambası beş ayrı kanaldan bildiriliyor — <em>çağrı merkezi</em>, CİMER, Beyaz Masa, sosyal medya, tekil uygulamalar. Vatandaş geri dönüş alamıyor; ekipler mükerrer bildirimlerde boğuluyor. Fixly <strong class='font-bold text-ink dark:text-white'>iki yüzeyli tek bir hat</strong>: vatandaş uygulaması ve personel paneli, aynı altyapıya yazar.",
+    "problem": "Bugün bozuk bir sokak lambası beş ayrı kanaldan bildiriliyor — <em>çağrı merkezi</em>, CİMER, Beyaz Masa, sosyal medya, tekil uygulamalar. Vatandaş geri dönüş alamıyor; ekipler mükerrer bildirimlerde boğuluyor. Fixly <strong class='font-semibold text-ink dark:text-white'>iki yüzeyli tek bir hat</strong>: vatandaş uygulaması ve personel paneli, aynı altyapıya yazar.",
+    "how.eyebrow": "Akış",
     "how.title": "Fotoğraftan çözüme üç adım",
     "how.sub": "Üyelik duvarı yok, form yok. Arayüz kameranın kendisi — gerisini yapay zekâ doldurur.",
     "step1.title": "Vatandaş fotoğraflar",
@@ -473,12 +500,13 @@ const STRINGS = {
     "step2.body": "Hugging Face görü modeli kategoriyi 2–8 saniyede önerir. PostGIS 50 m yarıçapı tarar — aynı çukurun 12. bildirimi kuyruğa değil mevcut kümeye eklenir.",
     "step3.title": "Ekipler çözer",
     "step3.body": "Tek kutu: kategoriyi onaylayın, birimi atayın, çözüldü olarak işaretleyin. Vatandaş durumu adım adım izler — <em>İnceleme → Atandı → Çözüldü</em> — okundu mu diye merak etmek yerine.",
+    "features.eyebrow": "Yetenekler",
     "features.title": "Form için değil, iş akışı için",
     "features.sub": "Bildirim formu işin kolay kısmı. Asıl değer mükerrer ayıklama ve inceleme akışında.",
     "f1.title": "YZ destekli kategoriler",
     "f1.body": "Görü modeli kategoriyi önerir; personel tek tıkla onaylar. Yalnızca cansız nesneler — kişi veya plaka tespiti asla.",
     "f2.title": "PostGIS mükerrer ayıklama",
-    "f2.body": "Kategori bazında <code class='rounded bg-paper px-1.5 py-0.5 text-xs dark:bg-slate-800'>ST_DWithin</code> kümeleme — tek çukurun 50 bildirimi, bildiren sayısıyla tek iş kalemine dönüşür.",
+    "f2.body": "Kategori bazında <code class='rounded bg-paper px-1.5 py-0.5 font-mono text-xs dark:bg-stone-800'>ST_DWithin</code> kümeleme — tek çukurun 50 bildirimi, bildiren sayısıyla tek iş kalemine dönüşür.",
     "f3.title": "Durum şeffaflığı",
     "f3.body": "Her bildirim, gönderimden çözüme açık bir zaman çizelgesi taşır. Güven gönderimde değil, geri bildirim döngüsünde kurulur.",
     "f4.title": "Varsayılan olarak iki dilli",
@@ -487,11 +515,13 @@ const STRINGS = {
     "f5.body": "Anonim vatandaş oturumları, çıkarımdan önce anonimleştirme, dokümante edilmiş silme politikası — gizlilik bir onay kutusu değil, mimari bir karardır.",
     "f6.title": "Yapay zekâ ile, açık geliştirme",
     "f6.body": "Uçtan uca Cursor ile geliştirildi — ADR ile kilitlenen kararlar, ajan kural setleri ve TR çevirilerini senkron tutan Cursor SDK betiği.",
+    "stack.eyebrow": "Mimari",
     "stack.title": "İki yüzey, tek altyapı",
     "stack.sub": "Her iki uygulama da aynı Go API'ye yazar. Olaylar süreç içi veriyolundan CV hattına akar; bildirimler, mekânsal işi PostGIS'in üstlendiği Postgres'e düşer.",
     "stack.li1": "<strong class='font-bold'>Vatandaş uygulaması</strong> — Expo · React Native · anonim JWT",
     "stack.li2": "<strong class='font-bold'>Personel paneli</strong> — Next.js · inceleme kutusu · harita görünümü",
     "stack.li3": "<strong class='font-bold'>API</strong> — Go (masterfabric) · Postgres + PostGIS · Hugging Face çıkarımı",
+    "run.eyebrow": "Hızlı başlangıç",
     "run.title": "Hepsini yerelde çalıştırın",
     "run.sub": "Postgres, Redis ve API tek betikte. <em>Demo Belediyesi</em> ile hazır veri — kategoriler, personel kullanıcıları ve ~30 bildirim.",
     "run.docs": "Kurulum, API anahtarları ve demo senaryosu:",
@@ -516,8 +546,8 @@ function setLang(lang) {
     : "Fixly — Urban issue reporting for Turkish municipalities";
   localStorage.setItem(LANG_KEY, lang);
 
-  const active = "bg-brand-500 text-white";
-  const idle = "text-slate-600 hover:text-ink dark:text-slate-300 dark:hover:text-white";
+  const active = "bg-brand-600 text-white";
+  const idle = "text-stone-600 hover:text-ink dark:text-stone-300 dark:hover:text-white";
   btnTR.className = btnTR.className.replace(active, "").replace(idle, "").trim();
   btnEN.className = btnEN.className.replace(active, "").replace(idle, "").trim();
   btnTR.className += " " + (lang === "tr" ? active : idle);
