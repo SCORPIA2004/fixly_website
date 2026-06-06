@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fixly — Pitch Deck</title>
+<meta name="description" content="Fixly pitch deck — AI-driven urban issue reporting for Turkish municipalities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=Public+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-50:#F0FDFA; --teal-100:#CCFBF1; --teal-300:#5EEAD4; --teal-500:#0D9488;
+    --teal-600:#0F766E; --teal-700:#115E59; --teal-900:#134E4A;
+    --orange:#F97316; --orange-600:#EA580C;
+    --ink:#1C1917; --stone-500:#78716C; --stone-600:#57534E;
+    --line:#E7E5E4; --paper:#FAFAF8;
+    --amber:#D97706; --green:#16A34A; --sky:#0369A1;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body { background:#E8E6E1; font-family:"Public Sans",system-ui,sans-serif; color:var(--ink); }
+  .display { font-family:Fraunces,Georgia,serif; }
+  .mono { font-family:"IBM Plex Mono",ui-monospace,monospace; }
+
+  /* ---------- slide geometry: fixed 1280x720, scaled to fit screen ---------- */
+  #deck { padding:32px 0 80px; }
+  .slide-wrap { width:1280px; margin:0 auto 32px; transform-origin: top left; }
+  .slide {
+    position:relative; width:1280px; height:720px; overflow:hidden;
+    background:#fff; border:1px solid var(--line);
+    box-shadow:0 12px 40px -14px rgba(28,25,23,.25);
+    padding:72px 84px;
+    display:flex; flex-direction:column;
+  }
+  .slide-footer {
+    position:absolute; left:84px; right:84px; bottom:36px;
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--stone-500);
+  }
+  .dotgrid::before {
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(rgba(13,148,136,.14) 1.1px, transparent 1.1px);
+    background-size:22px 22px; pointer-events:none;
+  }
+
+  /* ---------- shared bits ---------- */
+  .eyebrow { font-family:"IBM Plex Mono",monospace; font-size:13px; font-weight:600;
+    letter-spacing:.22em; text-transform:uppercase; color:var(--teal-600); margin-bottom:18px; }
+  h1 { font-family:Fraunces,serif; font-weight:600; letter-spacing:-.01em; }
+  h2 { font-family:Fraunces,serif; font-size:44px; font-weight:600; letter-spacing:-.01em; line-height:1.12; }
+  .lead { font-size:20px; line-height:1.6; color:var(--stone-600); }
+  .squiggle {
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 9' preserveAspectRatio='none'%3E%3Cpath d='M2 7c18-5 38-5 58-3s40 2 58-2' fill='none' stroke='%23F97316' stroke-width='3.2' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:0 100%; background-size:100% .42em; padding-bottom:.18em;
+  }
+  .chip { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--teal-100);
+    background:var(--teal-50); color:var(--teal-700); border-radius:999px; padding:6px 14px;
+    font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:26px; }
+  .badge { display:inline-block; border-radius:999px; padding:4px 12px; font-size:12px; font-weight:700; white-space:nowrap; }
+  .b-amber { background:#FEF3C7; color:#B45309; }
+  .b-sky   { background:#E0F2FE; color:#0369A1; }
+  .b-green { background:#DCFCE7; color:#15803D; }
+  .b-teal  { background:var(--teal-50); color:var(--teal-700); }
+
+  /* ---------- print ---------- */
+  #print-btn {
+    position:fixed; right:24px; bottom:24px; z-index:10;
+    display:flex; align-items:center; gap:10px;
+    background:var(--orange); color:#fff; border:none; cursor:pointer;
+    font:700 15px "Public Sans",sans-serif; padding:14px 22px; border-radius:999px;
+    box-shadow:0 6px 20px rgba(249,115,22,.4); transition:background .2s;
+  }
+  #print-btn:hover { background:var(--orange-600); }
+  #print-hint {
+    position:fixed; left:24px; bottom:24px; z-index:10; max-width:340px;
+    background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px;
+    font-size:12.5px; color:var(--stone-600); box-shadow:0 4px 16px rgba(28,25,23,.12);
+  }
+  @page { size: 1280px 720px; margin: 0; }
+  @media print {
+    body { background:#fff; }
+    #deck { padding:0; }
+    .slide-wrap { transform:none !important; margin:0; height:auto !important; }
+    .slide { border:none; box-shadow:none; page-break-after:always; break-after:page; }
+    #print-btn, #print-hint { display:none; }
+  }
+</style>
+</head>
+<body>
+
+<button id="print-btn" type="button" aria-label="Download as PDF">
+  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>
+  Download PDF
+</button>
+<div id="print-hint"><strong>Tip:</strong> in the print dialog choose “Save as PDF”, set margins to <em>None</em> and enable <em>Background graphics</em>.</div>
+
+<div id="deck">
+
+<!-- ════════ 1 · TITLE ════════ -->
+<div class="slide-wrap"><section class="slide dotgrid" style="background:var(--paper);">
+  <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center;">
+    <span class="chip" style="margin-bottom:34px; width:fit-content;">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>
+      Cursor Hackathon · AI-Driven Urban Solutions
+    </span>
+    <div style="display:flex; align-items:center; gap:22px; margin-bottom:26px;">
+      <svg width="76" height="76" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 21s-7-5.1-7-11a7 7 0 1 1 14 0c0 5.9-7 11-7 11Z" fill="#0D9488"/>
+        <path d="M9.6 9.8l1.7 1.7-1.2 1.2a1.7 1.7 0 0 0 2.4 2.4l1.2-1.2 1.7 1.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>
+      <h1 style="font-size:110px;">Fixly</h1>
+    </div>
+    <p class="display" style="font-size:34px; line-height:1.3; max-width:880px;">
+      A pothole shouldn't need a phone call, a form, and <span class="squiggle" style="white-space:nowrap;">a prayer.</span>
+    </p>
+    <p class="lead" style="margin-top:22px; max-width:760px;">
+      AI-driven urban issue reporting for Turkish municipalities — citizens report in 30 seconds,
+      staff resolve from one deduplicated queue.
+    </p>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>github.com/SCORPIA2004/fixly</span><span>01</span></div>
+</section></div>
+
+<!-- ════════ 2 · PROBLEM ════════ -->
+<div class="slide-wrap"><section class="slide">
+  <p class="eyebrow">The problem</p>
+  <h2 style="max-width:980px;">Five channels in. Zero feedback out.</h2>
+  <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:54px; margin-top:44px; flex:1;">
+    <div>
+      <p class="lead" style="font-size:21px;">
+        A broken streetlight in Istanbul gets reported through <em>çağrı merkezi</em>, CİMER,
+        Beyaz Masa, social media, and one-off municipal apps — all at once.
+      </p>
+      <ul style="margin-top:30px; list-style:none; display:flex; flex-direction:column; gap:18px; font-size:18px;">
+        <li style="display:flex; gap:14px; align-items:start;">
+          <span style="color:var(--orange); font-weight:800;">✕</span>
+          <span><strong>Citizens never hear back</strong> — no status, no closure, no trust. So they stop reporting.</span>
+        </li>
+        <li style="display:flex; gap:14px; align-items:start;">
+          <span style="color:var(--orange); font-weight:800;">✕</span>
+          <span><strong>Staff drown in duplicates</strong> — the same pothole arrives 50 times as 50 separate tickets.</span>
+        </li>
+        <li style="display:flex; gap:14px; align-items:start;">
+          <span style="color:var(--orange); font-weight:800;">✕</span>
+          <span><strong>Miscategorized reports bounce</strong> between departments before reaching the right crew.</span>
+        </li>
+      </ul>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:14px; justify-content:center;">
+      <div class="card" style="background:var(--paper);">
+        <p class="mono" style="font-size:12px; letter-spacing:.16em; text-transform:uppercase; color:var(--stone-500); margin-bottom:14px;">Today's reality</p>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:15px;">
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px;"><span>Çağrı merkezi</span><span class="mono" style="color:var(--stone-500);">on hold…</span></div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px;"><span>CİMER</span><span class="mono" style="color:var(--stone-500);">30+ days</span></div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px;"><span>Beyaz Masa</span><span class="mono" style="color:var(--stone-500);">separate queue</span></div>
+          <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:10px;"><span>Social media</span><span class="mono" style="color:var(--stone-500);">if it goes viral</span></div>
+          <div style="display:flex; justify-content:space-between;"><span>One-off apps</span><span class="mono" style="color:var(--stone-500);">abandoned</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>Problem</span><span>02</span></div>
+</section></div>
+
+<!-- ════════ 3 · SOLUTION ════════ -->
+<div class="slide-wrap"><section class="slide" style="background:var(--teal-900); color:#fff;">
+  <p class="eyebrow" style="color:var(--teal-300);">The solution</p>
+  <h2 style="color:#fff; max-width:1000px;">One pipeline. Two surfaces. <span style="color:var(--teal-300);">Same backend.</span></h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:52px;">
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(94,234,212,.25); border-radius:18px; padding:34px;">
+      <p class="mono" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-300); margin-bottom:14px;">Citizen app · Expo</p>
+      <p class="display" style="font-size:27px; line-height:1.35;">Photo + GPS + one line.<br>Submitted in ~30 seconds.</p>
+      <p style="margin-top:16px; font-size:16px; line-height:1.6; color:#CBD5D1;">
+        Anonymous on first launch — no signup wall. AI fills the category while they walk away.
+        Status updates close the loop.
+      </p>
+    </div>
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(94,234,212,.25); border-radius:18px; padding:34px;">
+      <p class="mono" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-300); margin-bottom:14px;">Staff dashboard · Next.js</p>
+      <p class="display" style="font-size:27px; line-height:1.35;">One triage inbox.<br>Deduplicated, pre-categorized.</p>
+      <p style="margin-top:16px; font-size:16px; line-height:1.6; color:#CBD5D1;">
+        Confirm the AI's category, assign the department, resolve the cluster —
+        50 duplicate reports close with one click.
+      </p>
+    </div>
+  </div>
+  <p class="display" style="margin-top:46px; font-size:22px; color:var(--teal-100); text-align:center;">
+    Trust = the feedback loop. The workflow is the moat.
+  </p>
+  <div class="slide-footer" style="color:rgba(204,251,241,.6);"><span>Fixly · Pitch</span><span>Solution</span><span>03</span></div>
+</section></div>
+
+<!-- ════════ 4 · HOW IT WORKS ════════ -->
+<div class="slide-wrap"><section class="slide" style="background:var(--paper);">
+  <p class="eyebrow">The pipeline</p>
+  <h2>Photo to fixed, in three moves</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px; margin-top:48px;">
+    <div class="card" style="position:relative; overflow:hidden;">
+      <span class="display" style="position:absolute; right:-12px; top:-34px; font-size:150px; font-weight:600; color:rgba(13,148,136,.09);">1</span>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2"><path d="M4 8h3l2-3h6l2 3h3v11H4V8Z"/><circle cx="12" cy="13" r="3.2"/></svg>
+      <h3 class="display" style="font-size:24px; margin-top:16px;">Citizen snaps it</h3>
+      <p style="margin-top:12px; font-size:15.5px; line-height:1.6; color:var(--stone-600);">
+        Anonymous JWT on first launch. Photo + GPS + optional one-liner from the Expo app. ~30 seconds, no account.
+      </p>
+    </div>
+    <div class="card" style="position:relative; overflow:hidden;">
+      <span class="display" style="position:absolute; right:-12px; top:-34px; font-size:150px; font-weight:600; color:rgba(13,148,136,.09);">2</span>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2"><path d="M12 3l1.9 5.6 5.6.4-4.6 3.4 1.8 5.6L12 14.6 7.3 18l1.8-5.6L4.5 9l5.6-.4L12 3Z"/></svg>
+      <h3 class="display" style="font-size:24px; margin-top:16px;">AI triages it</h3>
+      <p style="margin-top:12px; font-size:15.5px; line-height:1.6; color:var(--stone-600);">
+        Hugging Face vision suggests the category in 2–8s. PostGIS <span class="mono" style="font-size:13px;">ST_DWithin</span> folds nearby same-category reports into one cluster.
+      </p>
+    </div>
+    <div class="card" style="position:relative; overflow:hidden;">
+      <span class="display" style="position:absolute; right:-12px; top:-34px; font-size:150px; font-weight:600; color:rgba(13,148,136,.09);">3</span>
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0D9488" stroke-width="2.2"><path d="M5 13l4 4 10-10"/></svg>
+      <h3 class="display" style="font-size:24px; margin-top:16px;">Staff resolve it</h3>
+      <p style="margin-top:12px; font-size:15.5px; line-height:1.6; color:var(--stone-600);">
+        Confirm category → assign department → resolve. The citizen watches: <em>İnceleme → Atandı → Çözüldü</em>.
+      </p>
+    </div>
+  </div>
+  <div style="display:flex; justify-content:center; gap:60px; margin-top:50px;">
+    <div style="text-align:center;"><p class="mono" style="font-size:34px; font-weight:600; color:var(--teal-600);">~30s</p><p class="mono" style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone-500); margin-top:4px;">to report</p></div>
+    <div style="text-align:center;"><p class="mono" style="font-size:34px; font-weight:600; color:var(--teal-600);">2–8s</p><p class="mono" style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone-500); margin-top:4px;">AI category</p></div>
+    <div style="text-align:center;"><p class="mono" style="font-size:34px; font-weight:600; color:var(--teal-600);">50m</p><p class="mono" style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone-500); margin-top:4px;">dedup radius</p></div>
+    <div style="text-align:center;"><p class="mono" style="font-size:34px; font-weight:600; color:var(--teal-600);">TR·EN</p><p class="mono" style="font-size:11px; letter-spacing:.18em; text-transform:uppercase; color:var(--stone-500); margin-top:4px;">both surfaces</p></div>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>How it works</span><span>04</span></div>
+</section></div>
+
+<!-- ════════ 5 · PRODUCT ════════ -->
+<div class="slide-wrap"><section class="slide">
+  <p class="eyebrow">The product</p>
+  <h2>The staff inbox, as the citizen fills it</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; margin-top:40px; align-items:center;">
+    <!-- inbox mock -->
+    <div class="card" style="background:#fff; box-shadow:0 14px 44px -16px rgba(28,25,23,.22); transform:rotate(.6deg);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+        <p style="font-size:15px; font-weight:700;">Triage inbox · Demo Belediyesi</p>
+        <span class="badge b-teal">12 open</span>
+      </div>
+      <div style="border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <div><p style="font-weight:700; font-size:14.5px;">Yol ve kaldırım</p>
+          <p style="font-size:12.5px; color:var(--stone-500); margin-top:2px;">Kadıköy · Moda Cd. — 41.015, 28.979</p></div>
+          <span class="badge b-amber">pending triage</span>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <span class="badge b-teal">★ AI: pothole · 0.87</span>
+          <span class="badge" style="background:var(--paper); color:var(--stone-600);">12 kişi bildirdi</span>
+        </div>
+      </div>
+      <div style="border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <div><p style="font-weight:700; font-size:14.5px;">Sokak aydınlatması</p>
+          <p style="font-size:12.5px; color:var(--stone-500); margin-top:2px;">Üsküdar · Çamlıca — Fen İşleri</p></div>
+          <span class="badge b-sky">assigned</span>
+        </div>
+      </div>
+      <div style="border:1px solid var(--line); border-radius:14px; padding:16px; opacity:.7;">
+        <div style="display:flex; justify-content:space-between; gap:12px;">
+          <div><p style="font-weight:700; font-size:14.5px;">Çöp ve temizlik</p>
+          <p style="font-size:12.5px; color:var(--stone-500); margin-top:2px;">Beşiktaş · resolved in 2 days</p></div>
+          <span class="badge b-green">resolved</span>
+        </div>
+      </div>
+    </div>
+    <!-- right column -->
+    <div>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:22px; font-size:17.5px;">
+        <li style="display:flex; gap:14px;"><span style="color:var(--teal-500); font-weight:800;">→</span>
+          <span><strong>AI suggestion with confidence</strong> — staff confirm, not categorize from scratch.</span></li>
+        <li style="display:flex; gap:14px;"><span style="color:var(--teal-500); font-weight:800;">→</span>
+          <span><strong>Dedup badge</strong> — “12 kişi bildirdi” turns 12 tickets into 1 work item with civic weight.</span></li>
+        <li style="display:flex; gap:14px;"><span style="color:var(--teal-500); font-weight:800;">→</span>
+          <span><strong>Status timeline</strong> mirrored to the citizen's phone — the trust loop, closed.</span></li>
+        <li style="display:flex; gap:14px;"><span style="color:var(--teal-500); font-weight:800;">→</span>
+          <span><strong>Map view</strong> of open clusters, colored by status, for field planning.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>Product</span><span>05</span></div>
+</section></div>
+
+<!-- ════════ 6 · AI & GEO MOAT ════════ -->
+<div class="slide-wrap"><section class="slide" style="background:var(--paper);">
+  <p class="eyebrow">Why it's defensible</p>
+  <h2>The form is easy. <span class="squiggle">Dedup + triage</span> is the moat.</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:26px; margin-top:46px;">
+    <div class="card" style="background:#fff;">
+      <p class="mono" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-600); margin-bottom:12px;">Computer vision</p>
+      <p class="display" style="font-size:23px; line-height:1.4;">Camera-first: AI fills the form while the citizen looks.</p>
+      <p style="margin-top:14px; font-size:15.5px; line-height:1.65; color:var(--stone-600);">
+        Hugging Face inference proposes one of 11 municipal categories with a confidence score.
+        Async pipeline — submission never waits on the model. Wrong guess? Staff fix it in one click,
+        and that correction is future training data.
+      </p>
+    </div>
+    <div class="card" style="background:#fff;">
+      <p class="mono" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-600); margin-bottom:12px;">Geospatial dedup</p>
+      <p class="display" style="font-size:23px; line-height:1.4;">50 reports of one pothole = one cluster, not 50 tickets.</p>
+      <p style="margin-top:14px; font-size:15.5px; line-height:1.65; color:var(--stone-600);">
+        PostGIS <span class="mono" style="font-size:13px;">ST_DWithin</span> matching per category with tunable radius and
+        time window. Reporter counts give staff a built-in severity signal — and citizens see
+        “you and 11 others” instead of silence.
+      </p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:26px; background:var(--teal-50); border-color:var(--teal-100);">
+    <div style="display:flex; gap:16px; align-items:center;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F766E" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z"/></svg>
+      <p style="font-size:16.5px; line-height:1.55;"><strong>KVKK by architecture:</strong> anonymous sessions, inanimate-object detection only (never people or plates), redaction before inference, documented deletion policy.</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>Moat</span><span>06</span></div>
+</section></div>
+
+<!-- ════════ 7 · ARCHITECTURE ════════ -->
+<div class="slide-wrap"><section class="slide">
+  <p class="eyebrow">Architecture</p>
+  <h2>Boring where it should be, clever where it counts</h2>
+  <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:48px; margin-top:42px; align-items:center;">
+    <div>
+      <!-- flow diagram -->
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <div style="display:flex; gap:14px;">
+          <div class="card" style="flex:1; padding:18px; text-align:center; border-color:var(--teal-100); background:var(--teal-50);">
+            <p style="font-weight:700; font-size:15px;">Expo app</p><p class="mono" style="font-size:11.5px; color:var(--stone-500); margin-top:3px;">citizen · anonymous JWT</p>
+          </div>
+          <div class="card" style="flex:1; padding:18px; text-align:center; border-color:var(--teal-100); background:var(--teal-50);">
+            <p style="font-weight:700; font-size:15px;">Next.js dashboard</p><p class="mono" style="font-size:11.5px; color:var(--stone-500); margin-top:3px;">staff · RBAC</p>
+          </div>
+        </div>
+        <div style="text-align:center; color:var(--stone-500); font-size:22px; line-height:1.2; padding:6px;">↓</div>
+        <div class="card" style="padding:18px; text-align:center;">
+          <p style="font-weight:700; font-size:15px;">Go API <span style="font-weight:400; color:var(--stone-500);">(masterfabric-go + Fixly domain)</span></p>
+          <p class="mono" style="font-size:11.5px; color:var(--stone-500); margin-top:3px;">REST /api/v1 · in-process event bus</p>
+        </div>
+        <div style="text-align:center; color:var(--stone-500); font-size:22px; line-height:1.2; padding:6px;">↓</div>
+        <div style="display:flex; gap:14px;">
+          <div class="card" style="flex:1; padding:18px; text-align:center;">
+            <p style="font-weight:700; font-size:15px;">Postgres + PostGIS</p><p class="mono" style="font-size:11.5px; color:var(--stone-500); margin-top:3px;">reports · clusters · dedup</p>
+          </div>
+          <div class="card" style="flex:1; padding:18px; text-align:center;">
+            <p style="font-weight:700; font-size:15px;">Hugging Face</p><p class="mono" style="font-size:11.5px; color:var(--stone-500); margin-top:3px;">async CV inference</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <ul style="list-style:none; display:flex; flex-direction:column; gap:18px; font-size:16.5px;">
+        <li style="display:flex; gap:12px;"><span style="color:var(--teal-500); font-weight:800;">→</span><span><strong>DDD bounded context</strong> on an open-source Go foundation — multi-tenant from day one, one org for the demo.</span></li>
+        <li style="display:flex; gap:12px;"><span style="color:var(--teal-500); font-weight:800;">→</span><span><strong>Event-driven CV</strong> — submit returns instantly; inference and clustering happen off the request path.</span></li>
+        <li style="display:flex; gap:12px;"><span style="color:var(--teal-500); font-weight:800;">→</span><span><strong>Shared TR/EN catalogs</strong> (<span class="mono" style="font-size:13.5px;">packages/i18n</span>) consumed by both surfaces.</span></li>
+        <li style="display:flex; gap:12px;"><span style="color:var(--teal-500); font-weight:800;">→</span><span><strong>No Kafka, no microservices</strong> — in-process bus, one deployable. Hackathon-honest.</span></li>
+      </ul>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>Architecture</span><span>07</span></div>
+</section></div>
+
+<!-- ════════ 8 · AI-DRIVEN DEVELOPMENT ════════ -->
+<div class="slide-wrap"><section class="slide" style="background:var(--teal-900); color:#fff;">
+  <p class="eyebrow" style="color:var(--teal-300);">AI adaptation</p>
+  <h2 style="color:#fff;">Built <em style="color:var(--teal-300);">with</em> AI, not just <em style="color:var(--teal-300);">about</em> AI</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:22px; margin-top:48px;">
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(94,234,212,.25); border-radius:18px; padding:28px;">
+      <p class="mono" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-300); margin-bottom:12px;">Cursor IDE · agentic</p>
+      <p style="font-size:16px; line-height:1.65; color:#E7E5E4;">
+        Project ruleset in <span class="mono" style="font-size:13.5px;">.cursor/rules/</span>, ADR-first prompting —
+        decisions locked in <span class="mono" style="font-size:13.5px;">docs/decisions/</span> before implementation.
+      </p>
+    </div>
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(94,234,212,.25); border-radius:18px; padding:28px;">
+      <p class="mono" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-300); margin-bottom:12px;">Cursor SDK · programmatic</p>
+      <p style="font-size:16px; line-height:1.65; color:#E7E5E4;">
+        <span class="mono" style="font-size:13.5px;">Agent.prompt()</span> script keeps Turkish translations in sync with English —
+        formal <em>siz</em>, municipal terminology, key-parity validated before write.
+      </p>
+    </div>
+    <div style="background:rgba(255,255,255,.06); border:1px solid rgba(94,234,212,.25); border-radius:18px; padding:28px;">
+      <p class="mono" style="font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal-300); margin-bottom:12px;">Guardrails · KVKK</p>
+      <p style="font-size:16px; line-height:1.65; color:#E7E5E4;">
+        Every CV/image prompt carries the blur-before-inference rule. Privacy constraints live in the
+        prompts, not just the docs.
+      </p>
+    </div>
+  </div>
+  <p class="display" style="margin-top:44px; font-size:21px; color:var(--teal-100); text-align:center;">
+    Reproducible AI workflows the team re-runs — not one-off chat sessions.
+  </p>
+  <div class="slide-footer" style="color:rgba(204,251,241,.6);"><span>Fixly · Pitch</span><span>AI-driven development</span><span>08</span></div>
+</section></div>
+
+<!-- ════════ 9 · DEMO ════════ -->
+<div class="slide-wrap"><section class="slide" style="background:var(--paper);">
+  <p class="eyebrow">Live demo</p>
+  <h2>Five minutes, end to end</h2>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; margin-top:42px; flex:1;">
+    <ol style="list-style:none; counter-reset:demo; display:flex; flex-direction:column; gap:16px;">
+      <li style="display:flex; gap:16px; align-items:start;"><span class="mono" style="color:var(--teal-600); font-weight:600; font-size:15px;">01</span><span style="font-size:17px;">Citizen submits a pothole photo from the phone <strong>(TR UI)</strong></span></li>
+      <li style="display:flex; gap:16px; align-items:start;"><span class="mono" style="color:var(--teal-600); font-weight:600; font-size:15px;">02</span><span style="font-size:17px;">Admin inbox shows it <strong>within seconds</strong> — AI category + confidence attached</span></li>
+      <li style="display:flex; gap:16px; align-items:start;"><span class="mono" style="color:var(--teal-600); font-weight:600; font-size:15px;">03</span><span style="font-size:17px;">Assign to <em>Yol ve Kaldırım</em>, mark in progress</span></li>
+      <li style="display:flex; gap:16px; align-items:start;"><span class="mono" style="color:var(--teal-600); font-weight:600; font-size:15px;">04</span><span style="font-size:17px;">Second citizen reports the same spot → <strong>dedup:</strong> “12 kişi bildirdi”</span></li>
+      <li style="display:flex; gap:16px; align-items:start;"><span class="mono" style="color:var(--teal-600); font-weight:600; font-size:15px;">05</span><span style="font-size:17px;">Resolve the cluster — citizen's timeline flips to <span class="badge b-green" style="font-size:13px;">Çözüldü</span></span></li>
+      <li style="display:flex; gap:16px; align-items:start;"><span class="mono" style="color:var(--teal-600); font-weight:600; font-size:15px;">06</span><span style="font-size:17px;">Switch admin to <strong>EN locale</strong> — same data, translated UI</span></li>
+    </ol>
+    <div style="display:flex; flex-direction:column; gap:14px; justify-content:center;">
+      <div class="card" style="background:var(--teal-900); border:none; color:#fff;">
+        <pre class="mono" style="font-size:13.5px; line-height:1.7; overflow:hidden; color:var(--teal-50);"><span style="color:rgba(94,234,212,.7);"># one script: Postgres + Redis + API + seed</span>
+cd services/api && ./dev.sh
+
+<span style="color:rgba(94,234,212,.7);"># staff dashboard</span>
+cd apps/web && npm run dev
+
+<span style="color:rgba(94,234,212,.7);"># citizen app (Expo Go)</span>
+cd apps/mobile && npm start</pre>
+      </div>
+      <p style="font-size:14px; color:var(--stone-500); text-align:center;">Seeded as <em>Demo Belediyesi</em> — categories, staff users, ~30 reports.</p>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>Demo</span><span>09</span></div>
+</section></div>
+
+<!-- ════════ 10 · CLOSE ════════ -->
+<div class="slide-wrap"><section class="slide dotgrid" style="background:var(--paper);">
+  <div style="position:relative; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;">
+    <svg width="58" height="58" viewBox="0 0 24 24" fill="none" aria-hidden="true" style="margin-bottom:26px;">
+      <path d="M12 21s-7-5.1-7-11a7 7 0 1 1 14 0c0 5.9-7 11-7 11Z" fill="#0D9488"/>
+      <path d="M9.6 9.8l1.7 1.7-1.2 1.2a1.7 1.7 0 0 0 2.4 2.4l1.2-1.2 1.7 1.7" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+    <h2 style="font-size:54px; max-width:900px;">Every report deserves <span class="squiggle">an answer.</span></h2>
+    <p class="lead" style="margin-top:24px; max-width:660px;">
+      Fixly closes the loop between citizens and their municipality —
+      starting with <em>ilçe belediyeleri</em> in Istanbul.
+    </p>
+    <div style="display:flex; gap:30px; margin-top:44px; align-items:center;">
+      <span class="chip">github.com/SCORPIA2004/fixly</span>
+      <span class="chip" style="background:#FFF7ED; border-color:#FFEDD5; color:var(--orange-600);">scorpia2004.github.io/fixly</span>
+    </div>
+  </div>
+  <div class="slide-footer"><span>Fixly · Pitch</span><span>Teşekkürler · Thank you</span><span>10</span></div>
+</section></div>
+
+</div><!-- /deck -->
+
+<script>
+// Scale fixed 1280x720 slides to fit the viewport on screen
+function fitSlides() {
+  var pad = 32;
+  var scale = Math.min(1, (window.innerWidth - pad) / 1280);
+  document.querySelectorAll(".slide-wrap").forEach(function (w) {
+    w.style.transform = "scale(" + scale + ")";
+    w.style.height = 720 * scale + "px";
+    w.style.marginLeft = Math.max(0, (window.innerWidth - 1280 * scale) / 2 - 8) + "px";
+  });
+}
+fitSlides();
+window.addEventListener("resize", fitSlides);
+document.getElementById("print-btn").addEventListener("click", function () { window.print(); });
+</script>
+
+</body>
+</html>
